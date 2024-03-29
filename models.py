@@ -1,24 +1,18 @@
-from pydantic import BaseModel
-from typing import Optional
-from typing import List
+# models.py - 데이터 베이스 테이블 컬럼 정의
+from sqlalchemy import Column, Integer, String
 
 
-class Book(BaseModel):
-    id: int
-    title: str
-    author: str
-    description: Optional[str] = None
+# Uwer(테이블)
+class User:
+    id = Column()
+    email = Column()
+    hashed_password = Column()
 
 
-class CreateBook(BaseModel):
-    title: str
-    author: str
-    description: Optional[str] = None
+# Item(테이블)
 
 
-class SearchBook(BaseModel):
-    results: Optional[Book]
-
-
-class SearchBooks(BaseModel):
-    results: List[Book]
+class Item:
+    id = Column()
+    title = Column()
+    description = Column()
