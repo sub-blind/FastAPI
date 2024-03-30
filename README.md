@@ -6,10 +6,10 @@
 
 - deactivate
 
-# FastApi 설치
+# FastApi 설치하기
 
 - pip install fastapi
 
-# uvicorn 설치
+# uvicorn 설치하기
 
 - pip install 'uvicorn[standard]'
