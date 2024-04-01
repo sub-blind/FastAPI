@@ -18,24 +18,8 @@ class ItemUpdate(ItemBase):
     description: str | None = None
 
 
-class Item(ItemBase):
-    id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
-
 class UserBase(BaseModel):
     email: str
-
-
-class User(UserBase):
-    id: int
-    items: List[Item]
-
-    class Config:
-        orm_mode = True
 
 
 class UserCreate(UserBase):
@@ -45,3 +29,19 @@ class UserCreate(UserBase):
 class UserUpdate(UserBase):
     email: str | None = None
     password: str | None = None  # python 3.10부터 추가된 기능입니다.
+
+
+class Item(ItemBase):
+    id: int
+    owner_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class User(UserBase):
+    id: int
+    items: List[Item]
+
+    class Config:
+        orm_mode = True
