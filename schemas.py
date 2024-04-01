@@ -23,12 +23,12 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str
+    hashed_password: str
 
 
 class UserUpdate(UserBase):
     email: str | None = None
-    password: str | None = None  # python 3.10부터 추가된 기능입니다.
+    hashed_password: str | None = None  # python 3.10부터 추가된 기능입니다.
 
 
 class Item(ItemBase):

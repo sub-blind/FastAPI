@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 import dependencies
-import crud
+import crud_orm
 import schemas
 
 router = APIRouter()
@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.get("/{item_id}")
 def get_item(item_id: int, db: Session = Depends(dependencies.get_db)):
-    item = crud.get_item(db, item_id)
+    item = crud_orm.get_item(db, item_id)
 
     if item is None:
         raise HTTPException(status_code=404, detaul="Item not found")
@@ -22,7 +22,7 @@ def get_item(item_id: int, db: Session = Depends(dependencies.get_db)):
 def get_items(
     skip: int = 0, limit: int = 10, db: Session = Depends(dependencies.get_db)
 ):
-    items = crud.get_items(db, skip, limit)
+    items = crud_orm.get_items(db, skip, limit)
     return items  # []
 
 
@@ -32,7 +32,7 @@ def create_item(
     owner_id: int,
     db: Session = Depends(dependencies.get_db),
 ):
-    item = crud.create_item(db, create_item, owner_id)
+    item = crud_orm.create_item(db, create_item, owner_id)
     return item
 
 
@@ -42,7 +42,7 @@ def update_item(
     item_update: schemas.ItemUpdate,
     db: Session = Depends(dependencies.get_db),
 ):
-    item = crud.update_item(db, item_id, item_update)
+    item = crud_orm.update_item(db, item_id, item_update)
 
     if item is None:
         raise HTTPException(status_code=404, detaul="Item not found")
@@ -51,7 +51,7 @@ def update_item(
 
 @router.delete("/{item_id}")
 def delete_item(item_id: int, db: Session = Depends(dependencies.get_db)):
-    is_success = crud.delete_item(db, item_id)
+    is_success = crud_orm.delete_item(db, item_id)
 
     if not is_success:
         raise HTTPException(status_code=404, detaul="Item not found")

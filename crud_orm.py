@@ -6,9 +6,11 @@ import bcrypt  # pip insall bcrypt
 
 # User - CRUD
 def create_user(db: Session, user: UserCreate):
-    print(user.password)  # OAuth2.0
+    print(user.hashed_password)  # OAuth2.0
 
-    hashed_password = bcrypt.hashpw(user.password)
+    hashed_password = bcrypt.hashpw(
+        user.hashed_password.encode("utf-8"), bcrypt.gensalt()
+    )
     db_user = User(email=user.email, hashed_password=hashed_password)
     db.add(db_user)
     db.commit()
