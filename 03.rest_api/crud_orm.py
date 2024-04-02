@@ -68,4 +68,52 @@ def delete_user(db: Session, user_id: int):
 
 # Item - CRUD
 
+
+def create_item(db: Session, item: ItemCreate, owner_id: int):  # 하나의 데이터 생성
+    db_item = Item(**item.dict(), owner_id=owner_id)  # ** -> key value 를 분류
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+
+    return db_item
+
+
 # FastAPI - Django(메인) + FastAPI(MSA) - Chatting // 비동기(ASGI)
+def get_item(db: Session, item_id: int):  # 하나의 아이템 데이터 조회
+    return db.query(Item).filter(Item.id == item_id).first()
+
+
+# pagenation -> 1~10개 데이터를 내려줬어. 11~20, 21~30, 31~40
+def get_items(
+    db: Session, skip: int = 0, limit: int = 10
+):  # 전체 아이템 데이터 조회 (Limit: 10~100)
+    return db.query(Item).offset(skip).limit(limit).all()
+    # return db.query(Item).order_by(Item.created_at.desc()).offset(skip).limit(limit).all()
+
+
+def update_item(
+    db: Session, item_id: int, item_update: ItemUpdate
+):  # 하나의 데이터 업데이트 {item_id}
+    db_item = db.query(Item).filter(Item.id == item_id).first()
+
+    if not db_item:
+        return None
+
+    for key, value in item_update.dict().items():
+        setattr(db_item, key, value)
+
+    db.commit()
+    db.refresh(db_item)
+
+    return db_item
+
+
+def delete_item(db: Session, item_id: int):  # 하나의 데이터 삭제 {item_id}
+    db_item = db.query(Item).filter(Item.id == item_id).first()
+    if not db_item:
+        return None
+
+    db.delete(db_item)
+    db.commit()
+
+    return True

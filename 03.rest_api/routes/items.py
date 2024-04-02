@@ -8,9 +8,18 @@ import schemas
 router = APIRouter()
 
 
+@router.post("/")
+def create_item(
+    owner_id: int,
+    item_create: schemas.ItemCreate,
+    db: Session = Depends(dependencies.get_db),
+):
+    return crud_orm.create_item(db, item_create, owner_id)
+
+
 @router.get("/{item_id}")
 def get_item(item_id: int, db: Session = Depends(dependencies.get_db)):
-    item = crud_orm.get_item(db, item_id)
+    return crud_orm.get_item(db, item_id)
 
     if item is None:
         raise HTTPException(status_code=404, detaul="Item not found")
@@ -24,16 +33,6 @@ def get_items(
 ):
     items = crud_orm.get_items(db, skip, limit)
     return items  # []
-
-
-@router.post("/")
-def create_item(
-    create_item: schemas.ItemCreate,
-    owner_id: int,
-    db: Session = Depends(dependencies.get_db),
-):
-    item = crud_orm.create_item(db, create_item, owner_id)
-    return item
 
 
 @router.put("/{item_id}")
